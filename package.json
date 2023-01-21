@@ -1,0 +1,111 @@
+{
+    "name": "vscode-eyaml",
+    "displayName": "Hiera Eyaml Extension",
+    "description": "VSCode Extension for encrypting/decrypting values in yaml using hiera-eyaml",
+    "author": "Emil Koemets",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.74.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:eyaml.encrypt",
+        "onCommand:eyaml.decrypt"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ekoemets/vscode-eyaml"
+    },
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "eyaml.encrypt",
+                "title": "Encrypt"
+            },
+            {
+                "command": "eyaml.decrypt",
+                "title": "Decrypt"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Hiera Eyaml",
+            "properties": {
+                "eyaml.eyamlPath": {
+                    "type": "string",
+                    "description": "Path to hiera-eyaml",
+                    "default": "eyaml"
+                },
+                "eyaml.outputFormat": {
+                    "type": "string",
+                    "description": "Output format of encrypt commands. Possible options: block, line",
+                    "default": "block"
+                },
+                "eyaml.outputBlockMaxLength": {
+                    "type": "number",
+                    "description": "Determines the maximum number of characters in one line, when using block formatting",
+                    "default": 64
+                },
+                "eyaml.publicKeyPath": {
+                    "type": "string",
+                    "description": "Path to public key used for encryption",
+                    "required": true
+                },
+                "eyaml.privateKeyPath": {
+                    "type": "string",
+                    "description": "Path to private key used for decryption"
+                }
+            }
+        },
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "resourceLangId == yaml",
+                    "group": "1_modification@20000",
+                    "submenu": "eyaml.crypt"
+                }
+            ],
+            "eyaml.crypt": [
+                {
+                    "command": "eyaml.encrypt",
+                    "group": "1_modification@20001"
+                },
+                {
+                    "command": "eyaml.decrypt",
+                    "group": "1_modification@20002"
+                }
+            ]
+        },
+        "submenus": [
+            {
+                "id": "eyaml.crypt",
+                "label": "Hiera Eyaml"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/glob": "^8.0.0",
+        "@types/mocha": "^10.0.1",
+        "@types/node": "16.x",
+        "@types/vscode": "^1.74.0",
+        "@typescript-eslint/eslint-plugin": "^5.45.0",
+        "@typescript-eslint/parser": "^5.45.0",
+        "@vscode/test-electron": "^2.2.0",
+        "eslint": "^8.28.0",
+        "eslint-config-prettier": "^8.6.0",
+        "glob": "^8.0.3",
+        "mocha": "^10.1.0",
+        "typescript": "^4.9.3"
+    }
+}
